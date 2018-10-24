@@ -1,0 +1,9 @@
+1. Que no se pueda repetir la varibale
+2. Mostrar la linea de error 
+3. colocar la asingacion a las variables
+4. Leer una variable
+5. Eliminar despues del punto y coma
+6. Mostrar la tabla de token  id,token,tipo,lexema,linea
+7. Colocar los Errores en un metodo
+
+

@@ -1,0 +1,17 @@
+//public class Compi
+//{
+///public static void main(Stirng arg[])
+//{
+cadena ernesto;
+entero caden;
+boleano imprimir;
+cadena enter;
+boleano caden;
+caden ;
+area;
+entero n
+Entero con;
+juan hola;
+//}
+//}
+

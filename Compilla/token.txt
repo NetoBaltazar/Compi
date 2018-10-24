@@ -1,0 +1,15 @@
+entero
+cadena
+bandera
+caracter
+imp("")
+ciclo
+leer
+si
+sisi
+sino
+falso
+verdadero
+ciclo()
+finciclo
+finsi
