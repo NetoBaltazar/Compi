@@ -8,7 +8,7 @@ boleano imprimir;
 cadena enter;
 boleano caden;
 caden ;
-area;
+imprimir;
 entero n
 Entero con;
 juan hola;

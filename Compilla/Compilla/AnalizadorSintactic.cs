@@ -12,83 +12,106 @@ namespace Compilla
     class AnalizadorSintactic
     {
         Error copiError = new Error();
-        string[] Save = new string[8] { "cadena", "entero", "boleano", "caracter","imp","leer","ciclo","si"};
+        string[] Save = new string[8] { "cadena", "entero", "boleano", "caracter", "imp", "leer", "ciclo", "si" };
         public StreamReader leer;
-        public int cont = 0,caso=1;
-        public bool existe = false,acceso=false,existe2=false;
+        public int cont = 0, caso = 1;
+        public bool existe = false, acceso = false, existe2 = false;
         public listaEnlazada ListaEn = new listaEnlazada();
-        public int contador = 0, opc = 0, contVar = 0,contador2=0;
-        public string reservada = "", variable = "",valor="",copiArchivo="";
+        public int contador = 0, opc = 0, contVar = 0, contador2 = 0;
+        public string reservada = "", variable = "", valor = "", copiArchivo = "",capture="";
         public AnalizadorLexic liz = new AnalizadorLexic();
 
         public void AnalizadorL()
         {
             leer = new StreamReader(@"C:\Users\jose_\source\repos\Compilador\Compilla\Leido.Neto");
-           string archivo = leer.ReadLine();
+            string archivo = leer.ReadLine();
             try
             {
                 //int copiares = liz.rescont;
                 while (archivo != null && archivo != "")
                 {
-                    contador++;               
+                    contador++;
                     char[] Cadena = archivo.ToCharArray();
                     reservada = "";
                     variable = "";
                     valor = "";
                     //contador = liz.cp;
-                    if (caso==1)
+                    if (caso == 1)
                     {
                         Regex la_chida = new Regex(@"^[a-z A-Z]+[ ]+([a-z A-Z 0-9]+[;])$");
-                        if (la_chida.IsMatch(archivo))
+                        Regex inputAcess = new Regex(@"^[a-zA-Z]+[;]$");
+                        if (la_chida.IsMatch(archivo) ||inputAcess.IsMatch(archivo))
                         {
-                            for (int i = 0; i < Cadena.Length-1; i++)
+                            if (inputAcess.IsMatch(archivo))
                             {
-                                if (Cadena[i] == ' ')
+                                for (int i = 0; i < archivo.Length-1; i++)
                                 {
-                                       for (int j = i + 1; j < Cadena.Length-1; j++)
-                                       {
-                                           variable += Cadena[j];  //concatena las variables 
-                                       }   
-                                    Case1();
-                                    //metodo para validar palabra reservada    
+                                   capture += Cadena[i];
+                                }
+                                ListaEn.buscartipo(capture);
+                                if (ListaEn.copilexema.Equals(capture))
+                                {
+                                    
+
                                 }
                                 else
                                 {
-                                    reservada += Cadena[i];  // concatena las palabras reservadas                             
+                                    ///mandar el error con la linea
+                                    Console.WriteLine("No existe el dato "+archivo);
                                 }
                             }
+                            else
+                            {
+                                for (int i = 0; i < Cadena.Length - 1; i++)
+                                {
+                                    if (Cadena[i] == ' ')
+                                    {
+                                        for (int j = i + 1; j < Cadena.Length - 1; j++)
+                                        {
+                                            variable += Cadena[j];  //concatena las variables 
+                                        }
+                                        Case1();
+                                        //metodo para validar palabra reservada    
+                                    }
+                                    else
+                                    {
+                                        reservada += Cadena[i];  // concatena las palabras reservadas                             
+                                    }
+                                }
+
+                            }
+                            
                         }
                         else
                         {
                             Regex lachida2 = new Regex(@"^[a-z A-Z]+[ ]+([=]{1})[ ]+[a-z A-Z 0-9]+[;]$");
                             if (lachida2.IsMatch(archivo))
                             {
-
-                                for (int i = 0; i < Cadena.Length-1; i++)
+                                for (int i = 0; i < Cadena.Length - 1; i++)
                                 {
                                     if (Cadena[i] == ' ')
                                     {
                                         if (Cadena[i + 1] == '=')
                                         {
-                                            if (Cadena[i+2]==' ')
+                                            if (Cadena[i + 2] == ' ')
                                             {
-                                                for (int j = i + 3; j < Cadena.Length-1; j++)
+                                                for (int j = i + 3; j < Cadena.Length - 1; j++)
                                                 {
                                                     valor += Cadena[j];
-                                                    
+
                                                     //concatena las valores
                                                 }
                                                 Case2(reservada);
                                                 //metodo para validar para verificar la varibale 
                                             }
                                         }
-                                             
+
                                     }
                                     else
                                     {
                                         reservada += Cadena[i];  // concatena las palabras reservadas                             
                                     }
-                                    
+
                                 }
 
                             }
@@ -103,7 +126,7 @@ namespace Compilla
                     }
                     else
                     {
-                        if (caso==2)
+                        if (caso == 2)
                         {
                             Regex Variar = new Regex(@"^[a-z A-Z]+[ ]+([=]{1})[ ]+[a-z A-Z 0-9]+[;]$");
                             if (Variar.IsMatch(archivo))
@@ -122,7 +145,7 @@ namespace Compilla
                                             Case2(reservada);
                                             //metodo para validar para verificar la varibale  
                                         }
-                                       
+
                                     }
                                     else
                                     {
@@ -153,18 +176,18 @@ namespace Compilla
                                 else
                                 {
                                     opc = 2;
-                                    copiError.ListaError(opc,archivo,contador);
+                                    copiError.ListaError(opc, archivo, contador);
                                 }
-                                
+
 
                             }
-                           
+
                         }
                     }
                     archivo = leer.ReadLine();  ///salta de linea del archivo
                    // Console.WriteLine(caso);
                 }
-                  Prinft();
+                Prinft();
 
             }
             catch (Exception ex)
@@ -173,12 +196,12 @@ namespace Compilla
             }
             Console.ReadLine();
         }
-       public void Case1() ///Declaracion
-       {
-       ValidarpalabraR(reservada, variable, contador); //////Cuerpo de las variables
-       }
-      public void Case2(String v) ////Asignacion
-      {
+        public void Case1() ///Declaracion
+        {
+            ValidarpalabraR(reservada, variable, contador); //////Cuerpo de las variables
+        }
+        public void Case2(String v) ////Asignacion
+        {
             caso = 2;
             if (ListaEn.Buscar(reservada) != null)   ///condcion para las variables si existen declaradas
             {
@@ -202,10 +225,10 @@ namespace Compilla
                 {
                     if (ListaEn.copiTipo.Equals("cadena"))
                     {
-                        if (valor=="falso" || valor=="verdadero")
+                        if (valor == "falso" || valor == "verdadero")
                         {
                             opc = 8;
-                            copiError.ListaError(opc,v,contador);
+                            copiError.ListaError(opc, v, contador);
                         }
                         else
                         {
@@ -223,15 +246,15 @@ namespace Compilla
                                 //Agregar los errores a la lista de errores 
                             }
                         }
-                       
+
                     }
                     else
                     {
                         if (ListaEn.copiTipo.Equals("boleano"))
                         {
-                          
+
                             ListaEn.buscarTipoEntrante(valor);
-                            if ((valor == "verdadero" || valor=="falso")|| ListaEn.copiInput.Equals("boleano"))
+                            if ((valor == "verdadero" || valor == "falso") || ListaEn.copiInput.Equals("boleano"))
                             {
                                 ListaEn.modificar(ListaEn.copilexema, valor); //metodo para modicar los valores de cadenas
 
@@ -239,7 +262,7 @@ namespace Compilla
                             else
                             {
                                 opc = 10;
-                                copiError.ListaError(opc,v,contador);
+                                copiError.ListaError(opc, v, contador);
                                 //Agregar los errores a la lista de errores 
                             }
 
@@ -274,7 +297,7 @@ namespace Compilla
             }
 
         }
-        public void caso3(string v,string archivo)
+        public void caso3(string v, string archivo)
         {
             String GuarVar = "";
             if (v.Equals("imp"))
@@ -287,7 +310,7 @@ namespace Compilla
                 else
                 {
                     opc = 12;
-                    copiError.ListaError(opc,archivo,contador);
+                    copiError.ListaError(opc, archivo, contador);
                 }
             }
             else
@@ -301,20 +324,20 @@ namespace Compilla
                         {
                             if (archivo[i] == ' ')
                             {
-                                 for (int j = i + 1; j < archivo.Length - 1; j++)
-                                  {
-                                   GuarVar += archivo[j];  //concatena las variables 
-                                  }
-                                if (ListaEn.Buscar(GuarVar)!=null)
+                                for (int j = i + 1; j < archivo.Length - 1; j++)
                                 {
-                                    ListaEn.editarLectura(GuarVar,"v");  //edita el valor de entrada
+                                    GuarVar += archivo[j];  //concatena las variables 
+                                }
+                                if (ListaEn.Buscar(GuarVar) != null)
+                                {
+                                    ListaEn.editarLectura(GuarVar, "v");  //edita el valor de entrada
                                 }
                                 else
                                 {
                                     opc = 9;
-                                    copiError.ListaError(opc,GuarVar,contador);
+                                    copiError.ListaError(opc, GuarVar, contador);
                                 }
-                                    
+
                             }
 
                         }
@@ -323,8 +346,8 @@ namespace Compilla
                     else
                     {
                         opc = 11;
-                        copiError.ListaError(opc,archivo,contador);
-                       
+                        copiError.ListaError(opc, archivo, contador);
+
                     }
 
                 }
@@ -332,58 +355,58 @@ namespace Compilla
                 {
                     if (v.Equals("si"))
                     {
-                       /* string dato1="";
-                        string dato2 = "";
-                        int k = 0;*/
+                        /* string dato1="";
+                         string dato2 = "";
+                         int k = 0;*/
                         Regex paraSi = new Regex(@"^[a-z]+[ ]+[(]+[a-z A-Z 0-9]+((\b)[> < >= <= ==]{1,2})+([a-z A-Z]+)+[)]$");
                         if (paraSi.IsMatch(archivo))
                         {
-                           /* for (int i = 0; i < archivo.Length - 1; i++)
-                            {
-                                if (archivo[i] == ' ')
-                                {
-                                    if (archivo[i + 1] == '(')
-                                    {
-                                        for (int j = i + 2; j < archivo.Length - 1; j++)
-                                        {
-                                            if ((archivo[j] != '>' && archivo[j]!='=' && archivo[j]!='<'))
-                                            {
-                                              dato2 += archivo[j];
-                                              k = 1;
-                                            }
-                                            else
-                                            {
-                                                if (k==1)
-                                                {
-                                                 dato1= dato2;
-                                                 dato2 = "";
-                                                }
-                                                k = 0;
-                                            }
+                            /* for (int i = 0; i < archivo.Length - 1; i++)
+                             {
+                                 if (archivo[i] == ' ')
+                                 {
+                                     if (archivo[i + 1] == '(')
+                                     {
+                                         for (int j = i + 2; j < archivo.Length - 1; j++)
+                                         {
+                                             if ((archivo[j] != '>' && archivo[j]!='=' && archivo[j]!='<'))
+                                             {
+                                               dato2 += archivo[j];
+                                               k = 1;
+                                             }
+                                             else
+                                             {
+                                                 if (k==1)
+                                                 {
+                                                  dato1= dato2;
+                                                  dato2 = "";
+                                                 }
+                                                 k = 0;
+                                             }
 
-                                        }
-                                        
-                                    }
-                                } 
+                                         }
 
-                            }
-                            ///madar el metodo buscar para ver si son iguales los tipos de datos
-                            //ListaEn.buscartipo(dato1); ListaEn.buscarTipoEntrante(dato2);
-                           if (ListaEn.copiTipo.Equals(ListaEn.copiInput))
-                            {
-                                //Console.WriteLine("Son iguales");
-                            }
-                            else
-                            {   ////Error de tipos de datos
-                                opc = 13;
-                                copiError.ListaError(opc,archivo,contador);
-                            }*/
+                                     }
+                                 } 
+
+                             }
+                             ///madar el metodo buscar para ver si son iguales los tipos de datos
+                             //ListaEn.buscartipo(dato1); ListaEn.buscarTipoEntrante(dato2);
+                            if (ListaEn.copiTipo.Equals(ListaEn.copiInput))
+                             {
+                                 //Console.WriteLine("Son iguales");
+                             }
+                             else
+                             {   ////Error de tipos de datos
+                                 opc = 13;
+                                 copiError.ListaError(opc,archivo,contador);
+                             }*/
 
                         }
                         else
                         {
                             opc = 11;
-                            copiError.ListaError(opc,archivo,contador);
+                            copiError.ListaError(opc, archivo, contador);
                         }
 
                     }
@@ -401,19 +424,19 @@ namespace Compilla
                                 opc = 11;
                                 copiError.ListaError(opc, archivo, contador);
                             }
-                           
+
                         }
                         else
                         {
                             opc = 11;
-                            copiError.ListaError(opc,v,contador);
+                            copiError.ListaError(opc, v, contador);
                         }
-                       
+
                     }
                 }
-                
+
             }
-           
+
         }
         public void ValidarpalabraR(String reservada, String variable, int contador) ////metodo para validar palabra reservada
         {
@@ -438,13 +461,13 @@ namespace Compilla
 
                 if (existe.Equals(true))
                 {
-                    if (reservada.Equals("entero")|| reservada.Equals("cadena")|| reservada.Equals("caracter")|| reservada.Equals("boleano"))
+                    if (reservada.Equals("entero") || reservada.Equals("cadena") || reservada.Equals("caracter") || reservada.Equals("boleano"))
                     {
-                      Variables(reservada, variable, contador); ////varidar la veriable
+                        Variables(reservada, variable, contador); ////varidar la veriable
                     }
-                        
+
                 }
-               else
+                else
                 {
                     opc = 1;
                     //Error no existe la palabra reservada
@@ -469,9 +492,9 @@ namespace Compilla
                 if (validarVariable.IsMatch(variable))
                 {
                     // Console.WriteLine("Variable "+variable+" de tipo entero");
-                    ExplorarTipoDatos(reservada,variable,contador);  
+                    ExplorarTipoDatos(reservada, variable, contador);
                 }
-           
+
             }
             else
             {
@@ -492,7 +515,7 @@ namespace Compilla
                         {
                             //Console.WriteLine("Variable "+ variable+" de tipo caracter");
                             ExplorarTipoDatos(reservada, variable, contador);
-          
+
                         }
 
                     }
@@ -518,13 +541,13 @@ namespace Compilla
             Console.WriteLine("id  Lectura  Tipo  Lexema  Valor");
             ListaEn.imprimirLista();
         }
-        
-        public void ExplorarTipoDatos(String reservada,String variable, int contador) /// validacion de varibale
+
+        public void ExplorarTipoDatos(String reservada, String variable, int contador) /// validacion de varibale
         {
-            if (ListaEn.Buscar(variable)!=null)
+            if (ListaEn.Buscar(variable) != null)
             {
                 opc = 5;
-                copiError.ListaError(opc,variable,contador);
+                copiError.ListaError(opc, variable, contador);
             }
             else
             {
@@ -541,11 +564,11 @@ namespace Compilla
                     }
                 }
             }
-            
+
             if (acceso.Equals(true))
             {
-               
-            ListaEn.aadNodo(contador, "f", reservada, variable, contador); // almacena los tipos de variables
+
+                ListaEn.aadNodo(contador, "f", reservada, variable, contador); // almacena los tipos de variables
 
             }
             else

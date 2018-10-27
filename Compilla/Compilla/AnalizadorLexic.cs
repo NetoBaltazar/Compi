@@ -28,7 +28,7 @@ namespace Compilla
                     //Quita lineas en blanco
                     while (linea == string.Empty)
                     {
-                        blanco++;
+                        
                         linea = leer_archivo.ReadLine();
                         if (linea == null)
                         {
@@ -73,10 +73,7 @@ namespace Compilla
                     {
                         break;
                     }
-                    else
-                    {
-                        contL++;
-                    }
+                    
 
 
                     // Quita los tabuladores
@@ -90,8 +87,6 @@ namespace Compilla
                     Modificado.WriteLine(linea);
                     linea = leer_archivo.ReadLine();
                 }
-                rescont = contL - diagonal + blanco;
-                Console.WriteLine("contador  linea " + contL + " Contador Blanco " + blanco + " diagonal " + diagonal + " Resultado " + rescont);
                 leer_archivo.Close();
                 Modificado.Close();
                 Console.ReadLine();
