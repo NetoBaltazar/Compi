@@ -18,13 +18,13 @@ namespace Compilla
         public bool existe = false, acceso = false, existe2 = false;
         public listaEnlazada ListaEn = new listaEnlazada();
         public int contador = 0, opc = 0, contVar = 0, contador2 = 0;
-        public string reservada = "", variable = "", valor = "", copiArchivo = "",capture="";
+        public string reservada = "", variable = "", valor = "", copiArchivo = "",capture="", archivo="";
         public AnalizadorLexic liz = new AnalizadorLexic();
 
         public void AnalizadorL()
         {
             leer = new StreamReader(@"C:\Users\jose_\source\repos\Compilador\Compilla\Leido.Neto");
-            string archivo = leer.ReadLine();
+            archivo = leer.ReadLine();
             try
             {
                 //int copiares = liz.rescont;
@@ -40,7 +40,7 @@ namespace Compilla
                     {
                         Regex la_chida = new Regex(@"^[a-z A-Z]+[ ]+([a-z A-Z 0-9]+[;])$");
                         Regex inputAcess = new Regex(@"^[a-zA-Z]+[;]$");
-                        if (la_chida.IsMatch(archivo) ||inputAcess.IsMatch(archivo))
+                        if (la_chida.IsMatch(archivo) || inputAcess.IsMatch(archivo))
                         {
                             if (inputAcess.IsMatch(archivo))
                             {
@@ -52,12 +52,13 @@ namespace Compilla
                                 if (ListaEn.copilexema.Equals(capture))
                                 {
                                     
-
                                 }
                                 else
                                 {
                                     ///mandar el error con la linea
-                                    Console.WriteLine("No existe el dato "+archivo);
+                                    opc = 9;
+                                    copiError.ListaError(opc,archivo,contador);
+                                   
                                 }
                             }
                             else
@@ -78,9 +79,8 @@ namespace Compilla
                                         reservada += Cadena[i];  // concatena las palabras reservadas                             
                                     }
                                 }
-
                             }
-                            
+
                         }
                         else
                         {
@@ -198,7 +198,7 @@ namespace Compilla
         }
         public void Case1() ///Declaracion
         {
-            ValidarpalabraR(reservada, variable, contador); //////Cuerpo de las variables
+            ValidarpalabraR(reservada, variable, contador,archivo); //////Cuerpo de las variables
         }
         public void Case2(String v) ////Asignacion
         {
@@ -218,7 +218,7 @@ namespace Compilla
                     else
                     {
                         opc = 7;
-                        copiError.ListaError(opc, valor, contador);
+                        copiError.ListaError(opc, archivo, contador);
                     }
                 }
                 else
@@ -438,7 +438,7 @@ namespace Compilla
             }
 
         }
-        public void ValidarpalabraR(String reservada, String variable, int contador) ////metodo para validar palabra reservada
+        public void ValidarpalabraR(String reservada, String variable, int contador, String archivo) ////metodo para validar palabra reservada
         {
             Regex validarpalabraR = new Regex("^[a-z]+$"); ///se valida la palabra reservada
             if (validarpalabraR.IsMatch(reservada))
@@ -471,7 +471,7 @@ namespace Compilla
                 {
                     opc = 1;
                     //Error no existe la palabra reservada
-                    copiError.ListaError(opc, reservada, contador);
+                    copiError.ListaError(opc,archivo, contador);
 
                 }
 
@@ -480,7 +480,7 @@ namespace Compilla
             {
                 opc = 2;
                 ///Error de sintaxis en palabra reservada
-                copiError.ListaError(opc, reservada, contador);
+                copiError.ListaError(opc, archivo, contador);
             }
         }
         public void Variables(String reservada, String variable, int contador)
