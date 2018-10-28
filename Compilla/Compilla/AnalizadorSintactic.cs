@@ -18,7 +18,7 @@ namespace Compilla
         public bool existe = false, acceso = false, existe2 = false;
         public listaEnlazada ListaEn = new listaEnlazada();
         public int contador = 0, opc = 0, contVar = 0, contador2 = 0;
-        public string reservada = "", variable = "", valor = "", copiArchivo = "",capture="", archivo="";
+        public string reservada = "", variable = "", valor = "", copiArchivo = "", capture = "", archivo = "",sav="";
         public AnalizadorLexic liz = new AnalizadorLexic();
 
         public void AnalizadorL()
@@ -44,21 +44,21 @@ namespace Compilla
                         {
                             if (inputAcess.IsMatch(archivo))
                             {
-                                for (int i = 0; i < archivo.Length-1; i++)
+                                for (int i = 0; i < archivo.Length - 1; i++)
                                 {
-                                   capture += Cadena[i];
+                                    capture += Cadena[i];
                                 }
                                 ListaEn.buscartipo(capture);
                                 if (ListaEn.copilexema.Equals(this.capture))
                                 {
-                                    
+
                                 }
                                 else
                                 {
                                     ///mandar el error con la linea
                                     opc = 9;
-                                    copiError.ListaError(opc,archivo,contador);
-                                   
+                                    copiError.ListaError(opc, archivo, contador);
+
                                 }
                             }
                             else
@@ -198,7 +198,7 @@ namespace Compilla
         }
         public void Case1() ///Declaracion
         {
-            ValidarpalabraR(reservada, variable, contador,archivo); //////Cuerpo de las variables
+            ValidarpalabraR(reservada, variable, contador, archivo); //////Cuerpo de las variables
         }
         public void Case2(String v) ////Asignacion
         {
@@ -256,7 +256,7 @@ namespace Compilla
                                     {
                                         ListaEn.modificar(ListaEn.copilexema, valor);
                                     }
-                                    
+
                                 }
 
 
@@ -325,9 +325,40 @@ namespace Compilla
             String GuarVar = "";
             if (v.Equals("imp"))
             {
+                
                 Regex paraImprimir = new Regex(@"^[a-z]+[ ]+[(](([#]+([a-z A-Z 0-9]|.*?)+[#])|([a-zA-Z0-9]))+[)]+[;]$");  //validacio en imprimir
                 if (paraImprimir.IsMatch(archivo))
                 {
+                    int n = 0;
+                    for (int i = 0; i <archivo.Length-1; i++)
+                    {
+                        if (archivo[i].Equals('#'))
+                        {
+                            n++;
+                        }
+                        if (n==2)
+                        {
+                            for (int j = i+1; j <archivo.Length-2; j++)
+                            {
+                                sav += archivo[j];
+                            }
+                            i = archivo.Length;
+                        }
+                    }
+                    Regex GetVariable = new Regex(@"^([a-zA-Z0-9])+$");
+                    if (GetVariable.IsMatch(sav))
+                    {
+                        ListaEn.buscartipo(this.sav);
+                        if (ListaEn.copilexema.Equals(this.sav))
+                        {
+
+                        }
+                        else
+                        {
+                            opc = 9;
+                            copiError.ListaError(opc,this.sav,contador);
+                        }
+                    }
                     //Console.WriteLine("Entro a imprimir " + v);
                 }
                 else
@@ -494,7 +525,7 @@ namespace Compilla
                 {
                     opc = 1;
                     //Error no existe la palabra reservada
-                    copiError.ListaError(opc,archivo, contador);
+                    copiError.ListaError(opc, archivo, contador);
 
                 }
 
