@@ -49,7 +49,7 @@ namespace Compilla
                                    capture += Cadena[i];
                                 }
                                 ListaEn.buscartipo(capture);
-                                if (ListaEn.copilexema.Equals(capture))
+                                if (ListaEn.copilexema.Equals(this.capture))
                                 {
                                     
                                 }
@@ -84,7 +84,7 @@ namespace Compilla
                         }
                         else
                         {
-                            Regex lachida2 = new Regex(@"^[a-z A-Z]+[ ]+([=]{1})[ ]+[a-z A-Z 0-9]+[;]$");
+                            Regex lachida2 = new Regex(@"^[a-z A-Z]+[ ]+([=]{1})[ ]+[# a-z A-Z 0-9]+[;]$");
                             if (lachida2.IsMatch(archivo))
                             {
                                 for (int i = 0; i < Cadena.Length - 1; i++)
@@ -128,7 +128,7 @@ namespace Compilla
                     {
                         if (caso == 2)
                         {
-                            Regex Variar = new Regex(@"^[a-z A-Z]+[ ]+([=]{1})[ ]+[a-z A-Z 0-9]+[;]$");
+                            Regex Variar = new Regex(@"^[a-z A-Z]+[ ]+([=]{1})[ ]+[ # a-z A-Z 0-9]+[;]$");
                             if (Variar.IsMatch(archivo))
                             {
                                 for (int i = 0; i < Cadena.Length - 1; i++)
@@ -156,7 +156,7 @@ namespace Compilla
                             else
                             {
                                 //validacion para el caso 3
-                                Regex inputCaso3 = new Regex(@"^[a-z]+[ ]+[( # a-z  > < = A-Z |.*? ) ;]+$");
+                                Regex inputCaso3 = new Regex(@"^[a-z]+[ ]+[( # a-z  > < = A-Z |.*? )]+[;]$");
                                 if (inputCaso3.IsMatch(archivo))
                                 {
                                     for (int i = 0; i < Cadena.Length; i++)
@@ -203,7 +203,7 @@ namespace Compilla
         public void Case2(String v) ////Asignacion
         {
             caso = 2;
-            if (ListaEn.Buscar(reservada) != null)   ///condcion para las variables si existen declaradas
+            if (ListaEn.Buscar(v) != null)   ///condcion para las variables si existen declaradas
             {
                 ListaEn.buscartipo(v); ///metodo en creado en listas enlazadas para buscar los tipos de datos
                 if (ListaEn.copiTipo.Equals("entero"))
@@ -232,19 +232,42 @@ namespace Compilla
                         }
                         else
                         {
-                            Regex paraCadena = new Regex("^[a-z A-Z]+$");
-                            ListaEn.buscarTipoEntrante(valor);
-                            if (paraCadena.IsMatch(valor) && ListaEn.copiInput.Equals("cadena"))
+                            Regex paraCadena = new Regex(@"^[a-z A-Z 0-9]+$");
+                            Regex paraCadena2 = new Regex(@"^(([#]+([a-z A-Z 0-9]|.*?)+[#]))$");
+                            if (paraCadena.IsMatch(this.valor) || paraCadena2.IsMatch(this.valor))
                             {
-                                ListaEn.modificar(ListaEn.copilexema, valor); //metodo para modicar los valores de cadenas
+                                if (paraCadena.IsMatch(this.valor))
+                                {
+                                    ListaEn.buscarTipoEntrante(valor);
+                                    if (ListaEn.copiInput.Equals("cadena"))
+                                    {
+                                        ListaEn.modificar(ListaEn.copilexema, valor); //metodo para modicar los valores de cadenas
+                                    }
+                                    else
+                                    {
+                                        opc = 8;
+                                        copiError.ListaError(opc, archivo, contador);
+                                        //Agregar los errores a la lista de errores 
+                                    }
+                                }
+                                else
+                                {
+                                    if (paraCadena2.IsMatch(valor))
+                                    {
+                                        ListaEn.modificar(ListaEn.copilexema, valor);
+                                    }
+                                    
+                                }
+
 
                             }
                             else
                             {
-                                opc = 8;
-                                copiError.ListaError(opc, v, contador);
-                                //Agregar los errores a la lista de errores 
+                                opc = 2;
+                                copiError.ListaError(opc, archivo, contador);
+
                             }
+
                         }
 
                     }
