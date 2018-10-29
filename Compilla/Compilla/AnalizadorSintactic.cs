@@ -156,7 +156,7 @@ namespace Compilla
                             else
                             {
                                 //validacion para el caso 3
-                                Regex inputCaso3 = new Regex(@"^[a-z]+[ ]+[( # a-z  > < = A-Z |.*? )]+[;]$");
+                                Regex inputCaso3 = new Regex(@"^[a-z]+[ ]+[( # + a-z  > < = A-Z |.*? )]+[;]$");
                                 if (inputCaso3.IsMatch(archivo))
                                 {
                                     for (int i = 0; i < Cadena.Length; i++)
@@ -326,40 +326,63 @@ namespace Compilla
             if (v.Equals("imp"))
             {
                 
-                Regex paraImprimir = new Regex(@"^[a-z]+[ ]+[(](([#]+([a-z A-Z 0-9]|.*?)+[#])|([a-zA-Z0-9]))+[)]+[;]$");  //validacio en imprimir
+                Regex paraImprimir = new Regex(@"^[a-z]+[ ]+[(](([#]+([a-z A-Z 0-9]|.*?)+[#]|[+])|([a-zA-Z0-9]))+[)]+[;]$");  //validacio en imprimir
                 if (paraImprimir.IsMatch(archivo))
                 {
-                    int n = 0;
-                    for (int i = 0; i <archivo.Length-1; i++)
+                   Regex impconvar = new Regex(@"^[a-z]+[ ]+[(](([#]+([a-z A-Z 0-9]|.*?)+[#]+[+]+[a-zA-z-9]+[)])+[;])$");
+                    if (impconvar.IsMatch(archivo))
                     {
-                        if (archivo[i].Equals('#'))
+                        Console.WriteLine("Caso 1");
+                        //int n = 0;
+                        /*for (int i = 0; i <archivo.Length-1; i++)
                         {
-                            n++;
-                        }
-                        if (n==2)
-                        {
-                            for (int j = i+1; j <archivo.Length-2; j++)
+                            if (archivo[i].Equals('#') && archivo[i+1].Equals('+'))
                             {
-                                sav += archivo[j];
+                                n++;
                             }
-                            i = archivo.Length;
-                        }
-                    }
-                    Regex GetVariable = new Regex(@"^([a-zA-Z0-9])+$");
-                    if (GetVariable.IsMatch(sav))
-                    {
-                        ListaEn.buscartipo(this.sav);
-                        if (ListaEn.copilexema.Equals(this.sav))
-                        {
+                            if (n==2)
+                            {
+                                for (int j = i+1; j <archivo.Length-2; j++)
+                                {
+                                    sav += archivo[j];
+                                }
+                                i = archivo.Length;
+                            }
+                        }*/
+                        /*  if (GetVariable.IsMatch(sav))
+                       {
+                           ListaEn.buscartipo(this.sav);
+                           if (ListaEn.copilexema.Equals(this.sav))
+                           {
 
+                           }
+                           else
+                           {
+                               opc = 9;
+                               copiError.ListaError(opc,this.sav,contador);
+                           }
+                       }*/
+                        //Console.WriteLine("Entro a imprimir " + v);
+
+                    }
+                    else
+                    {
+                        Regex impvar = new Regex(@"^[a-z]+[ ]+[(]+[a-zA-Z0-9]+[)]+[;]$");
+                        if (impvar.IsMatch(archivo))
+                        {
+                            Console.WriteLine("Caso 2");
                         }
                         else
                         {
-                            opc = 9;
-                            copiError.ListaError(opc,this.sav,contador);
+                            Regex soloimp = new Regex(@"^[a-z]+[ ]+[(]+[#]+([a-z A-Z 0-9]|.*?)+[#]+[)]+[;]$");
+                            if (soloimp.IsMatch(archivo))
+                            {
+                                Console.WriteLine("Caso 3");
+                            }
                         }
+
                     }
-                    //Console.WriteLine("Entro a imprimir " + v);
+
                 }
                 else
                 {
