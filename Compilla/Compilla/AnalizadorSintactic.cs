@@ -332,60 +332,68 @@ namespace Compilla
                    Regex impconvar = new Regex(@"^[a-z]+[ ]+[(](([#]+([a-z A-Z 0-9]|.*?)+[#]+[+]+[a-zA-z-9]+[)])+[;])$");
                     if (impconvar.IsMatch(archivo))
                     {
-                        Console.WriteLine("Caso 1");
-                        //int n = 0;
-                        /*for (int i = 0; i <archivo.Length-1; i++)
+                        int n = 0;
+                        for (int i = 0; i < archivo.Length - 1; i++)
                         {
-                            if (archivo[i].Equals('#') && archivo[i+1].Equals('+'))
+                            if (archivo[i].Equals('#') && archivo[i + 1].Equals('+'))
                             {
                                 n++;
                             }
-                            if (n==2)
+                            if (n == 1)
                             {
-                                for (int j = i+1; j <archivo.Length-2; j++)
+                                for (int j = i + 2; j < archivo.Length - 2; j++)
                                 {
                                     sav += archivo[j];
                                 }
                                 i = archivo.Length;
                             }
-                        }*/
-                        /*  if (GetVariable.IsMatch(sav))
-                       {
-                           ListaEn.buscartipo(this.sav);
-                           if (ListaEn.copilexema.Equals(this.sav))
-                           {
+                        }
 
-                           }
-                           else
-                           {
-                               opc = 9;
-                               copiError.ListaError(opc,this.sav,contador);
-                           }
-                       }*/
-                        //Console.WriteLine("Entro a imprimir " + v);
+                        ListaEn.buscartipo(this.sav);
+                        if (ListaEn.copilexema.Equals(this.sav))
+                        {
 
+                        }
+                        else
+                        {
+                            opc = 9;
+                            copiError.ListaError(opc, this.sav, contador);
+                        }
                     }
                     else
                     {
                         Regex impvar = new Regex(@"^[a-z]+[ ]+[(]+[a-zA-Z0-9]+[)]+[;]$");
                         if (impvar.IsMatch(archivo))
                         {
-                            Console.WriteLine("Caso 2");
-                        }
-                        else
-                        {
-                            Regex soloimp = new Regex(@"^[a-z]+[ ]+[(]+([#]+([a-z A-Z 0-9]|.*?)+[#])+[)]+[;]$");
-                            if (soloimp.IsMatch(archivo))
+                            int n = 0;
+                            for (int i = 0; i < archivo.Length - 1; i++)
                             {
-                                Console.WriteLine("Caso 3");
+                                if (archivo[i].Equals('('))
+                                {
+                                    n++;
+                                }
+                                if (n == 1)
+                                {
+                                    for (int j = i + 1; j < archivo.Length - 2; j++)
+                                    {
+                                        sav += archivo[j];
+                                    }
+                                    i = archivo.Length;
+                                }
+                            }
+
+                            ListaEn.buscartipo(this.sav);
+                            if (ListaEn.copilexema.Equals(this.sav))
+                            {
+
                             }
                             else
                             {
-                                opc = 12;
-                                copiError.ListaError(opc, archivo, contador);
+                                opc = 9;
+                                copiError.ListaError(opc, this.sav, contador);
                             }
                         }
-
+                       
                     }
 
                 }
