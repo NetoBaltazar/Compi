@@ -128,7 +128,7 @@ namespace Compilla
                     {
                         if (caso == 2)
                         {
-                            Regex Variar = new Regex(@"^[a-z A-Z]+[ ]+([=]{1})[ ]+[ # a-z A-Z 0-9]+[;]$");
+                            Regex Variar = new Regex(@"^[a-zA-Z]+[ ]+([=]{1})[ ]+[ # a-z A-Z 0-9]+[;]$");
                             if (Variar.IsMatch(archivo))
                             {
                                 for (int i = 0; i < Cadena.Length - 1; i++)
@@ -326,7 +326,7 @@ namespace Compilla
             if (v.Equals("imp"))
             {
                 
-                Regex paraImprimir = new Regex(@"^[a-z]+[ ]+[(](([#]+([a-z A-Z 0-9]|.*?)+[#]|[+])|([a-zA-Z0-9]))+[)]+[;]$");  //validacio en imprimir
+                Regex paraImprimir = new Regex(@"^[a-z]+[ ]+[(]{1}(([#]+([a-z A-Z 0-9]|.*?)+[#]|[+])|([a-zA-Z0-9]))+[)]{1}()+[;]$");  //validacio en imprimir
                 if (paraImprimir.IsMatch(archivo))
                 {
                    Regex impconvar = new Regex(@"^[a-z]+[ ]+[(](([#]+([a-z A-Z 0-9]|.*?)+[#]+[+]+[a-zA-z-9]+[)])+[;])$");
@@ -374,10 +374,15 @@ namespace Compilla
                         }
                         else
                         {
-                            Regex soloimp = new Regex(@"^[a-z]+[ ]+[(]+[#]+([a-z A-Z 0-9]|.*?)+[#]+[)]+[;]$");
+                            Regex soloimp = new Regex(@"^[a-z]+[ ]+[(]+([#]+([a-z A-Z 0-9]|.*?)+[#])+[)]+[;]$");
                             if (soloimp.IsMatch(archivo))
                             {
                                 Console.WriteLine("Caso 3");
+                            }
+                            else
+                            {
+                                opc = 12;
+                                copiError.ListaError(opc, archivo, contador);
                             }
                         }
 
