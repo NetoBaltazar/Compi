@@ -10,25 +10,27 @@ namespace Compilla
 {
     class AnalizadorLexic
     {
-        public int blanco = 0, contL = 0, rescont=0, diagonal = 0,cp=0;
+        public int contadorl = -1;
+        public Dictionary<string, int> lineas = new Dictionary<string, int>();
         public StreamReader leer_archivo;
         public void ReemplazarContenido()
         {
             leer_archivo = new StreamReader(@"C:\Users\jose_\source\repos\Compilador\Compilla\Leer.txt");
             StreamWriter Modificado = File.CreateText(@"C:\Users\jose_\source\repos\Compilador\Compilla\Leido.Neto");
             string linea;
-
+           
            // string leer = leer_archivo.ReadLine();
             try
             {
                 linea = leer_archivo.ReadLine();
-                while (linea != null)
+                while (linea!=null)
                 {
-                   
+                    contadorl++;
+                    //lineas.Add(linea, contadorl);
                     //Quita lineas en blanco
                     while (linea == string.Empty)
                     {
-                        
+                       
                         linea = leer_archivo.ReadLine();
                         if (linea == null)
                         {
@@ -47,7 +49,7 @@ namespace Compilla
                     {
                         if (linea[i] == '/' && linea[i + 1] == '/')
                         {
-                            diagonal++;
+                            contadorl++;
                             if (i > 1)
                             {
                                 string cadena = "";
@@ -73,7 +75,7 @@ namespace Compilla
                     {
                         break;
                     }
-                    
+
 
 
                     // Quita los tabuladores
@@ -82,14 +84,16 @@ namespace Compilla
                     //Quita espacios en blanco y solo deja una
                     //linea = Regex.Replace(linea, @"\s+", "");
                     //quita espacio en blanco al principio 
-
+                    lineas.Add(linea,contadorl);
                     Console.WriteLine(linea);
                     Modificado.WriteLine(linea);
                     linea = leer_archivo.ReadLine();
                 }
+               // Console.WriteLine(contadorl);
                 leer_archivo.Close();
                 Modificado.Close();
                 Console.ReadLine();
+               
             }
             catch (Exception e)
             {

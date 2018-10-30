@@ -11,7 +11,7 @@ namespace Compilla
 {
     class AnalizadorSintactic
     {
-        Error copiError = new Error();
+       public Error copiError = new Error();
         string[] Save = new string[8] { "cadena", "entero", "boleano", "caracter", "imp", "leer", "ciclo", "si" };
         public StreamReader leer;
         public int cont = 0, caso = 1;
@@ -35,7 +35,9 @@ namespace Compilla
                     reservada = "";
                     variable = "";
                     valor = "";
-                    //contador = liz.cp;
+                    //Console.WriteLine(archivo);
+                    Console.WriteLine(liz.lineas[archivo]);
+                  
                     if (caso == 1)
                     {
                         Regex la_chida = new Regex(@"^[a-z A-Z]+[ ]+([a-z A-Z 0-9]+[;])$");
