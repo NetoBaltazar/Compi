@@ -10,7 +10,7 @@ namespace Compilla
 {
     class AnalizadorLexic
     {
-        public int contadorl = -1;
+        public int contadorl = 0;
         public Dictionary<string, int> lineas = new Dictionary<string, int>();
         public StreamReader leer_archivo;
         public void ReemplazarContenido()
