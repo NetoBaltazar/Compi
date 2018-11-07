@@ -18,7 +18,6 @@ namespace Compilla
         {
             Program pr = new Program();
             pr.depurado.ReemplazarContenido();
-           // Console.WriteLine("Hola raza ");
             pr.Analizando.AnalizadorL(pr.depurado.lineas);
         }
 

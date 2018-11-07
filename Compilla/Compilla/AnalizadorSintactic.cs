@@ -17,12 +17,12 @@ namespace Compilla
         public int cont = 0, caso = 1;
         public bool existe = false, acceso = false, existe2 = false;
         public listaEnlazada ListaEn = new listaEnlazada();
-        public int contador = 0, opc = 0, contVar = 0, contador2 = 0;
+        public int contador = 1, opc = 0, contVar = 0, contador2 = 0;
         public string reservada = "", variable = "", valor = "", copiArchivo = "", capture = "", archivo = "",sav="";
         public AnalizadorLexic liz = new AnalizadorLexic();
-        public Dictionary<string, int> hem2 = new Dictionary<string, int>();
+        public Dictionary<int, int> hem2 = new Dictionary<int, int>();
 
-        public void AnalizadorL(Dictionary<string,int> hem)
+        public void AnalizadorL(Dictionary<int,int> hem)
         {
          
             leer = new StreamReader(@"C:\Users\jose_\source\repos\Compilador\Compilla\Leido.Neto");
@@ -62,7 +62,7 @@ namespace Compilla
                                 {
                                     ///mandar el error con la linea
                                     opc = 9;
-                                    copiError.ListaError(opc, archivo, hem2[archivo]);
+                                    copiError.ListaError(opc, archivo, hem2[contador]);
 
                                 }
                             }
@@ -123,7 +123,7 @@ namespace Compilla
                             else
                             {
                                 opc = 2;
-                                copiError.ListaError(opc, archivo, hem2[archivo]);
+                                copiError.ListaError(opc, archivo, hem2[contador]);
                             }
 
                         }
@@ -181,7 +181,7 @@ namespace Compilla
                                 else
                                 {
                                     opc = 2;
-                                    copiError.ListaError(opc, archivo, hem2[archivo]);
+                                    copiError.ListaError(opc, archivo, hem2[contador]);
                                 }
 
 
@@ -223,7 +223,7 @@ namespace Compilla
                     else
                     {
                         opc = 7;
-                        copiError.ListaError(opc, archivo, hem2[archivo]);
+                        copiError.ListaError(opc, archivo, hem2[contador]);
                     }
                 }
                 else
@@ -233,7 +233,7 @@ namespace Compilla
                         if (valor == "falso" || valor == "verdadero")
                         {
                             opc = 8;
-                            copiError.ListaError(opc, v, hem2[archivo]);
+                            copiError.ListaError(opc, v, hem2[contador]);
                         }
                         else
                         {
@@ -251,7 +251,7 @@ namespace Compilla
                                     else
                                     {
                                         opc = 8;
-                                        copiError.ListaError(opc, archivo, hem2[archivo]);
+                                        copiError.ListaError(opc, archivo, hem2[contador]);
                                         //Agregar los errores a la lista de errores 
                                     }
                                 }
@@ -269,7 +269,7 @@ namespace Compilla
                             else
                             {
                                 opc = 2;
-                                copiError.ListaError(opc, archivo, hem2[archivo]);
+                                copiError.ListaError(opc, archivo, hem2[contador]);
 
                             }
 
@@ -290,7 +290,7 @@ namespace Compilla
                             else
                             {
                                 opc = 10;
-                                copiError.ListaError(opc, v, hem2[archivo]);
+                                copiError.ListaError(opc, v, hem2[contador]);
                                 //Agregar los errores a la lista de errores 
                             }
 
@@ -320,7 +320,7 @@ namespace Compilla
 
                 opc = 6;
                 //Error no existe la palabra reservada
-                copiError.ListaError(opc, reservada, hem2[archivo]);
+                copiError.ListaError(opc, reservada, hem2[contador]);
 
             }
 
@@ -362,7 +362,7 @@ namespace Compilla
                         else
                         {
                             opc = 9;
-                            copiError.ListaError(opc, this.sav, hem2[archivo]);
+                            copiError.ListaError(opc, this.sav, hem2[contador]);
                         }
                     }
                     else
@@ -396,7 +396,7 @@ namespace Compilla
                             {
                               
                                 opc = 9;
-                                copiError.ListaError(opc, this.sav, hem2[archivo]);
+                                copiError.ListaError(opc, this.sav, hem2[contador]);
                             }
                         }
                        
@@ -406,7 +406,7 @@ namespace Compilla
                 else
                 {
                     opc = 12;
-                    copiError.ListaError(opc, archivo, hem2[archivo]);
+                    copiError.ListaError(opc, archivo, hem2[contador]);
                 }
             }
             else
@@ -431,7 +431,7 @@ namespace Compilla
                                 else
                                 {
                                     opc = 9;
-                                    copiError.ListaError(opc, GuarVar, hem2[archivo]);
+                                    copiError.ListaError(opc, GuarVar, hem2[contador]);
                                 }
 
                             }

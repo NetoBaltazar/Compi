@@ -10,8 +10,8 @@ namespace Compilla
 {
     class AnalizadorLexic
     {
-        public int contadorl = 0;
-        public Dictionary<string, int> lineas = new Dictionary<string, int>();
+        public int contadorl = 0,contbuenas=1;
+        public Dictionary<int, int> lineas = new Dictionary<int, int>();
         public StreamReader leer_archivo;
         public void ReemplazarContenido()
         {
@@ -25,6 +25,7 @@ namespace Compilla
                 linea = leer_archivo.ReadLine();
                 while (linea!=null)
                 {
+                    
                     contadorl++;
                     //lineas.Add(linea, contadorl);
                     //Quita lineas en blanco
@@ -84,7 +85,8 @@ namespace Compilla
                     //Quita espacios en blanco y solo deja una
                     //linea = Regex.Replace(linea, @"\s+", "");
                     //quita espacio en blanco al principio 
-                    lineas.Add(linea,contadorl);
+                    contbuenas++;
+                    lineas.Add(contbuenas,contadorl);
                     Console.WriteLine(linea);
                     Modificado.WriteLine(linea);
                     linea = leer_archivo.ReadLine();
