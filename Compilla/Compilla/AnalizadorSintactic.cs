@@ -222,6 +222,7 @@ namespace Compilla
                     }
                     else
                     {
+                       
                         opc = 7;
                         copiError.ListaError(opc, archivo, hem2[contador]);
                     }
@@ -567,7 +568,7 @@ namespace Compilla
                 {
                     opc = 1;
                     //Error no existe la palabra reservada
-                    copiError.ListaError(opc, archivo, contador);
+                    copiError.ListaError(opc, archivo, hem2[contador]);
 
                 }
 
@@ -576,7 +577,7 @@ namespace Compilla
             {
                 opc = 2;
                 ///Error de sintaxis en palabra reservada
-                copiError.ListaError(opc, archivo, contador);
+                copiError.ListaError(opc, archivo, hem2[contador]);
             }
         }
         public void Variables(String reservada, String variable, int contador)
@@ -643,7 +644,7 @@ namespace Compilla
             if (ListaEn.Buscar(variable) != null)
             {
                 opc = 5;
-                copiError.ListaError(opc, variable, contador);
+                copiError.ListaError(opc, variable, hem2[contador]);
             }
             else
             {
@@ -670,7 +671,7 @@ namespace Compilla
             else
             {
                 opc = 3;
-                copiError.ListaError(opc, variable, contador);
+                copiError.ListaError(opc, variable, hem2[contador]);
             }
         }
     }
