@@ -17,7 +17,7 @@ namespace Compilla
         public int cont = 0, caso = 1;
         public bool existe = false, acceso = false, existe2 = false;
         public listaEnlazada ListaEn = new listaEnlazada();
-        public int contador = 1, opc = 0, contVar = 0, contador2 = 0;
+        public int contador = 0, opc = 0, contVar = 0, contador2 = 0;
         public string reservada = "", variable = "", valor = "", copiArchivo = "", capture = "", archivo = "",sav="";
         public AnalizadorLexic liz = new AnalizadorLexic();
         public Dictionary<int, int> hem2 = new Dictionary<int, int>();
@@ -40,7 +40,6 @@ namespace Compilla
                     valor = "";
                     //Console.WriteLine(archivo);
                      //Console.WriteLine(hem[archivo]);
-                  
                     if (caso == 1)
                     {
                         Regex la_chida = new Regex(@"^[a-z A-Z]+[ ]+([a-z A-Z 0-9]+[;])$");
@@ -49,22 +48,35 @@ namespace Compilla
                         {
                             if (inputAcess.IsMatch(archivo))
                             {
+                                capture = "";
                                 for (int i = 0; i < archivo.Length - 1; i++)
                                 {
                                     capture += Cadena[i];
                                 }
-                                ListaEn.buscartipo(capture);
-                                if (ListaEn.copilexema.Equals(this.capture))
+                                if (capture!="cadena" && capture!="entero" && capture!="boleano")
                                 {
+                                    ListaEn.buscartipo(capture);
+                                    if (ListaEn.copilexema.Equals(this.capture))
+                                    {
 
+                                    }
+                                    else
+                                    {
+                                        ///mandar el error con la linea
+                                        opc = 9;
+                                        copiError.ListaError(opc, archivo, hem2[contador]);
+
+                                    }
+
+                                    
                                 }
                                 else
                                 {
-                                    ///mandar el error con la linea
-                                    opc = 9;
+                                    opc = 14;
                                     copiError.ListaError(opc, archivo, hem2[contador]);
 
                                 }
+                                
                             }
                             else
                             {
@@ -89,7 +101,7 @@ namespace Compilla
                         }
                         else
                         {
-                            Regex lachida2 = new Regex(@"^[a-z A-Z]+[ ]+([=]{1})[ ]+[# a-z A-Z 0-9]+[;]$");
+                            Regex lachida2 = new Regex(@"^[a-z A-Z]+[ ]+([=]{1})[ ]+[#a-zA-Z0-9]+[;]$");
                             if (lachida2.IsMatch(archivo))
                             {
                                 for (int i = 0; i < Cadena.Length - 1; i++)
@@ -203,6 +215,7 @@ namespace Compilla
         }
         public void Case1() ///Declaracion
         {
+
             ValidarpalabraR(reservada, variable, contador, archivo); //////Cuerpo de las variables
         }
         public void Case2(String v) ////Asignacion
@@ -319,7 +332,7 @@ namespace Compilla
             else
             {
 
-                opc = 6;
+                opc = 9;
                 //Error no existe la palabra reservada
                 copiError.ListaError(opc, reservada, hem2[contador]);
 
@@ -443,7 +456,7 @@ namespace Compilla
                     else
                     {
                         opc = 11;
-                        copiError.ListaError(opc, archivo, contador);
+                        copiError.ListaError(opc, archivo, hem2[contador]);
 
                     }
 
@@ -503,7 +516,7 @@ namespace Compilla
                         else
                         {
                             opc = 11;
-                            copiError.ListaError(opc, archivo, contador);
+                            copiError.ListaError(opc, archivo, hem2[contador]);
                         }
 
                     }
@@ -519,14 +532,14 @@ namespace Compilla
                             else
                             {
                                 opc = 11;
-                                copiError.ListaError(opc, archivo, contador);
+                                copiError.ListaError(opc, archivo, hem2[contador]);
                             }
 
                         }
                         else
                         {
-                            opc = 11;
-                            copiError.ListaError(opc, v, contador);
+                            opc = 12;
+                            copiError.ListaError(opc, v, hem2[contador]);
                         }
 
                     }

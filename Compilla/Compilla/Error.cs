@@ -25,6 +25,9 @@ namespace Compilla
                case 11:{ Console.WriteLine("Error, no existe la palabra  (" + reservada + ") Linea " + linea); Console.Read(); } break;
                case 12:{ Console.WriteLine("Error de sintaxis en la frase "+reservada+" linea "+linea); Console.Read(); }break;
                case 13:{ Console.WriteLine("Error los tipos de datos son distintos " + reservada + " linea " + linea); Console.Read(); } break;
+               case 14:{ Console.WriteLine("Falta agregar nombre a la variable " + reservada + " linea " + linea); Console.Read(); } break;
+
+
 
             }
         }
