@@ -145,7 +145,7 @@ namespace Compilla
                     {
                         if (caso == 2)
                         {
-                            Regex Variar = new Regex(@"^[a-zA-Z]+[ ]+([=]{1})[ ]+[ # a-z A-Z 0-9]+[;]$");
+                            Regex Variar = new Regex(@"^[a-zA-Z]+[ ]+([=]{1})[ ]+[#a-zA-Z0-9]+[;]$");
                             if (Variar.IsMatch(archivo))
                             {
                                 for (int i = 0; i < Cadena.Length - 1; i++)
@@ -294,19 +294,30 @@ namespace Compilla
                     {
                         if (ListaEn.copiTipo.Equals("boleano"))
                         {
-
-                            ListaEn.buscarTipoEntrante(valor);
-                            if ((valor == "verdadero" || valor == "falso") || ListaEn.copiInput.Equals("boleano"))
+                            Regex paraBoleano = new Regex(@"^[a-z]+$");
+                            if (paraBoleano.IsMatch(valor))
                             {
-                                ListaEn.modificar(ListaEn.copilexema, valor); //metodo para modicar los valores de cadenas
+                                ListaEn.buscarTipoEntrante(valor);
+                                if ((valor == "verdadero" || valor == "falso") || ListaEn.copiInput.Equals("boleano"))
+                                {
+                                    ListaEn.modificar(ListaEn.copilexema, valor); //metodo para modicar los valores de cadenas
+
+                                }
+                                else
+                                {
+                                    opc = 10;
+                                    copiError.ListaError(opc, v, hem2[contador]);
+                                    //Agregar los errores a la lista de errores 
+                                }
 
                             }
                             else
                             {
                                 opc = 10;
-                                copiError.ListaError(opc, v, hem2[contador]);
-                                //Agregar los errores a la lista de errores 
+                                copiError.ListaError(opc,v, hem2[contador]);
+
                             }
+                           
 
                         }
                         else
@@ -539,7 +550,7 @@ namespace Compilla
                         else
                         {
                             opc = 12;
-                            copiError.ListaError(opc, v, hem2[contador]);
+                            copiError.ListaError(opc, archivo, hem2[contador]);
                         }
 
                     }
