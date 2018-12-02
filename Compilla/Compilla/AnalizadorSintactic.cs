@@ -17,8 +17,8 @@ namespace Compilla
         public int cont = 0, caso = 1;
         public bool existe = false, acceso = false, existe2 = false;
         public listaEnlazada ListaEn = new listaEnlazada();
-        public int contador = 0, opc = 0, contVar = 0, contador2 = 0;
-        public string reservada = "", variable = "", valor = "", copiArchivo = "", capture = "", archivo = "",sav="";
+        public int contador = 0, opc = 0, contVar = 0,contador2=0;
+        public string reservada = "", variable = "", valor = "", copiArchivo = "", capture = "", archivo = "",sav="",archivo2="";
         public AnalizadorLexic liz = new AnalizadorLexic();
         public Dictionary<int, int> hem2 = new Dictionary<int, int>();
 
@@ -27,6 +27,7 @@ namespace Compilla
          
             leer = new StreamReader(@"C:\Users\jose_\source\repos\Compilador\Compilla\Leido.Neto");
             archivo = leer.ReadLine();
+
             hem2 = hem;
             try
             {
@@ -173,7 +174,7 @@ namespace Compilla
                             else
                             {
                                 //validacion para el caso 3
-                                Regex inputCaso3 = new Regex(@"^[a-z]+[ ]+[( # + a-z  > < = A-Z |.*? )]+[;]$");
+                                Regex inputCaso3 = new Regex(@"^[a-z]+[ ]+[( # + a-z  > < = A-Z |.*? )]|[;]$");
                                 if (inputCaso3.IsMatch(archivo))
                                 {
                                     for (int i = 0; i < Cadena.Length; i++)
@@ -352,10 +353,9 @@ namespace Compilla
         }
         public void caso3(string v, string archivo)
         {
-            String GuarVar = "";
+            String GuarVar = ""; 
             if (v.Equals("imp"))
             {
-                
                 Regex paraImprimir = new Regex(@"^[a-z]+[ ]+[(]{1}(([#]+([a-z A-Z 0-9]|.*?)+[#]|[+])|([a-zA-Z0-9]))+[)]{1}()+[;]$");  //validacio en imprimir
                 if (paraImprimir.IsMatch(archivo))
                 {
@@ -430,6 +430,7 @@ namespace Compilla
                 }
                 else
                 {
+                    
                     opc = 12;
                     copiError.ListaError(opc, archivo, hem2[contador]);
                 }
@@ -438,7 +439,7 @@ namespace Compilla
             {
                 if (v.Equals("leer"))
                 {
-                    Regex paraLeer = new Regex(@"^[a-z]+[ ]+[a-z A-Z]+[;]$");
+                    Regex paraLeer = new Regex(@"^[a-z]+[ ]+[a-zA-Z]+[;]$");
                     if (paraLeer.IsMatch(archivo))
                     {
                         for (int i = 0; i < archivo.Length - 1; i++)
@@ -476,57 +477,56 @@ namespace Compilla
                 {
                     if (v.Equals("si"))
                     {
-                        /* string dato1="";
-                         string dato2 = "";
-                         int k = 0;*/
-                        Regex paraSi = new Regex(@"^[a-z]+[ ]+[(]+[a-z A-Z 0-9]+((\b)[> < >= <= ==]{1,2})+([a-z A-Z]+)+[)]$");
+ 
+                        Regex paraSi = new Regex(@"^[a-z]+[ ]+[(]+[a-zA-Z0-9]+((\b)[> < >= <= ==]{1,2})+([a-zA-Z0-9]+)+[)]$");
                         if (paraSi.IsMatch(archivo))
                         {
-                            /* for (int i = 0; i < archivo.Length - 1; i++)
-                             {
-                                 if (archivo[i] == ' ')
-                                 {
-                                     if (archivo[i + 1] == '(')
-                                     {
-                                         for (int j = i + 2; j < archivo.Length - 1; j++)
-                                         {
-                                             if ((archivo[j] != '>' && archivo[j]!='=' && archivo[j]!='<'))
-                                             {
-                                               dato2 += archivo[j];
-                                               k = 1;
-                                             }
-                                             else
-                                             {
-                                                 if (k==1)
-                                                 {
-                                                  dato1= dato2;
-                                                  dato2 = "";
-                                                 }
-                                                 k = 0;
-                                             }
+                            archivo = leer.ReadLine();
+                            do
+                            {
+                                contador++;
+                                if (archivo.Equals("sisi"))
+                                {
+                                    Console.WriteLine("Entro al sisi");
+                                    do
+                                    {
+                                        archivo = leer.ReadLine();
 
-                                         }
+                                    } while (archivo != "sino");
+                                }
+                                else
+                                {
+                                    if (archivo.Equals("sino"))
+                                    {
+                                        Console.WriteLine("Entro al sino");
+                                        do
+                                        {
+                                            archivo = leer.ReadLine();
 
-                                     }
-                                 } 
-
-                             }
-                             ///madar el metodo buscar para ver si son iguales los tipos de datos
-                             //ListaEn.buscartipo(dato1); ListaEn.buscarTipoEntrante(dato2);
-                            if (ListaEn.copiTipo.Equals(ListaEn.copiInput))
-                             {
-                                 //Console.WriteLine("Son iguales");
-                             }
-                             else
-                             {   ////Error de tipos de datos
-                                 opc = 13;
-                                 copiError.ListaError(opc,archivo,contador);
-                             }*/
-
+                                        } while (archivo != "finsi");
+                                    }
+                                    else
+                                    {
+                                        if (archivo.Equals("finsi"))
+                                        {
+                                            contador2 = 1;
+                                            Console.WriteLine("Entro al finsi");
+                                            //archivo = leer.ReadLine();
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("Error de Sintax "+archivo);
+                                            archivo = leer.ReadLine();
+                                        }
+                                    }
+                                }
+                            } while (archivo!="finsi" || contador2!=1);
+                            
+                           
                         }
                         else
                         {
-                            opc = 11;
+                            opc = 2;
                             copiError.ListaError(opc, archivo, hem2[contador]);
                         }
 
@@ -549,6 +549,7 @@ namespace Compilla
                         }
                         else
                         {
+                            
                             opc = 12;
                             copiError.ListaError(opc, archivo, hem2[contador]);
                         }
