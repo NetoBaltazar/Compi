@@ -182,13 +182,14 @@ namespace Compilla
                 actual = actual.siguente;
             }
         }
-
-         public int Size()
+      
+        public int Size()
          {
           return size;
+        
          }
-
-       public Nodo Buscar(String n)
+     
+        public Nodo Buscar(String n)
         {
             Nodo p = Primero;
             if (p==null)

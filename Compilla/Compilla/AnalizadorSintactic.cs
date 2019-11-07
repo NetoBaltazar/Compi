@@ -21,6 +21,11 @@ namespace Compilla
         public string reservada = "", variable = "", valor = "", copiArchivo = "", capture = "", archivo = "",sav="",archivo2="";
         public AnalizadorLexic liz = new AnalizadorLexic();
         public Dictionary<int, int> hem2 = new Dictionary<int, int>();
+        public string cadd = "";
+        public StreamReader leer_archivo;
+        public string[] arc = new string[50];
+        public string[] are = new string[50];
+        public int cmaa = 0,otrom=0,otro1=0,otro2=0,ponle=0;
 
         public void AnalizadorL(Dictionary<int,int> hem)
         {
@@ -206,13 +211,143 @@ namespace Compilla
                    // Console.WriteLine(caso);
                 }
                 Prinft();
+                
 
             }
             catch (Exception ex)
             {
                 Console.WriteLine("hey " + ex.Message);
             }
+            
             Console.ReadLine();
+            leer_archivo = new StreamReader(@"C:\Users\jose_\Desktop\masm\prog_base_compi.asm");
+            StreamWriter Modificado = File.CreateText(@"C:\Users\jose_\Desktop\masm\ejec.asm");
+            string nuevaL = "";
+         
+            try
+            {
+                nuevaL = leer_archivo.ReadLine();
+                while (nuevaL!=null)
+                {
+                    if (nuevaL.Equals("cortar1"))
+                    {
+
+                        int a = ListaEn.Size();
+                        for (int i = 0; i <a; i++)
+                        {
+                            if ((ListaEn.Tipo(i)).Equals("cadena"))
+                            {
+
+                                if ((ListaEn.Lectura(i).Equals("f")))
+                                {
+                                    Modificado.WriteLine(ListaEn.Lexema(i)+" db "+"\""+ListaEn.Valor(i)+"$\"");
+
+                                }
+
+                                if ((ListaEn.Lectura(i).Equals("v")))
+                                {
+                                    Modificado.WriteLine(ListaEn.Lexema(i) + " db " + "50,?,50 dup('$')");
+
+                                }
+
+
+                            }
+                            else
+                            {
+                                if ((ListaEn.Tipo(i)).Equals("entero"))
+                                {
+                                    if ((ListaEn.Lectura(i).Equals("f")))
+                                    {
+                                     Modificado.WriteLine(ListaEn.Lexema(i) + " db " + ListaEn.Valor(i));
+
+                                    }
+                                    else
+                                    {
+                                        Modificado.WriteLine(ListaEn.Lexema(i) + " db " + "50,?,50 dup('$')");
+                                    }
+                                    
+
+             
+                                }
+                            }
+                            
+                        }
+                        Console.ReadLine();
+                        
+
+                    }
+                    else
+                    {
+                        if (nuevaL.Equals("cortar2"))
+                        {
+                            
+                            for (int i = 0; i < cadd.Length; i++)
+                            {
+                               
+                                if (cadd[i].Equals('I'))
+                                {
+                          
+                                        for (int j = 0; j < ListaEn.Size(); j++)
+                                        {
+
+                                            if (are[ponle].Equals(ListaEn.Lexema(j)))
+                                            {
+
+                                                if (ListaEn.Lectura(j).Equals("v"))
+                                                {
+                                                    Modificado.WriteLine("MOV DX,OFFSET " + are[otro1] + "+2");
+                                                    Modificado.WriteLine("MOV AH,09");
+                                                    Modificado.WriteLine("INT 21H");
+                                                    otro1++;
+
+                                                }
+                                                else
+                                                {
+                                                    Modificado.WriteLine("MOV DX,OFFSET " + are[otro1]);
+                                                    Modificado.WriteLine("MOV AH,09");
+                                                    Modificado.WriteLine("INT 21H");
+                                                    otro1++;
+
+                                                }
+                                                
+                                            }
+                                        }
+                                    ponle++;
+                                }
+                                else
+                                {
+                                    if ((cadd[i].Equals('C')))
+                                    {
+                                        Modificado.WriteLine("lea dx," + arc[otro2]);
+                                        Modificado.WriteLine("mov ah,0Ah");
+                                        Modificado.WriteLine("int 21h");
+                                        otro2++;
+                                    }
+
+                                }
+                            }
+                            
+                        }
+                        else
+                        {
+                            Modificado.WriteLine(nuevaL);
+                        }
+                    }
+                    nuevaL = leer_archivo.ReadLine();
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex);
+                Console.ReadKey();
+            }
+            leer_archivo.Close();
+            Modificado.Close();
+
+
         }
         public void Case1() ///Declaracion
         {
@@ -356,6 +491,7 @@ namespace Compilla
             String GuarVar = ""; 
             if (v.Equals("imp"))
             {
+                cadd += "I";
                 Regex paraImprimir = new Regex(@"^[a-z]+[ ]+[(]{1}(([#]+([a-z A-Z 0-9]|.*?)+[#]|[+])|([a-zA-Z0-9]))+[)]{1}()+[;]$");  //validacio en imprimir
                 if (paraImprimir.IsMatch(archivo))
                 {
@@ -374,15 +510,18 @@ namespace Compilla
                                 for (int j = i + 2; j < archivo.Length - 2; j++)
                                 {
                                     sav += archivo[j];
+                                   
                                 }
+                               
                                 i = archivo.Length;
                             }
                         }
-
+                        
                         ListaEn.buscartipo(this.sav);
                         if (ListaEn.copilexema.Equals(this.sav))
                         {
-
+                           
+                            sav = "";
                         }
                         else
                         {
@@ -395,6 +534,7 @@ namespace Compilla
                         Regex impvar = new Regex(@"^[a-z]+[ ]+[(]+[a-zA-Z0-9]+[)]+[;]$");
                         if (impvar.IsMatch(archivo))
                         {
+                           
                             int n = 0;
                             for (int i = 0; i < archivo.Length - 1; i++)
                             {
@@ -407,7 +547,10 @@ namespace Compilla
                                     for (int j = i + 1; j < archivo.Length - 2; j++)
                                     {
                                         sav += archivo[j];
+                                       
+                                        
                                     }
+                                   
                                     i = archivo.Length;
                                 }
                             }
@@ -415,7 +558,10 @@ namespace Compilla
                             ListaEn.buscartipo(this.sav);
                             if (ListaEn.copilexema.Equals(this.sav))
                             {
-
+                                are[otrom] = sav;
+                                sav = "";
+                                otrom++;
+                              
                             }
                             else
                             {
@@ -439,6 +585,7 @@ namespace Compilla
             {
                 if (v.Equals("leer"))
                 {
+                    cadd += "C";
                     Regex paraLeer = new Regex(@"^[a-z]+[ ]+[a-zA-Z]+[;]$");
                     if (paraLeer.IsMatch(archivo))
                     {
@@ -452,7 +599,10 @@ namespace Compilla
                                 }
                                 if (ListaEn.Buscar(GuarVar) != null)
                                 {
+                                    arc[cmaa] = GuarVar;
                                     ListaEn.editarLectura(GuarVar, "v");  //edita el valor de entrada
+                                    cmaa++;
+                                    GuarVar = "";
                                 }
                                 else
                                 {
@@ -464,6 +614,7 @@ namespace Compilla
 
                         }
                         //Console.WriteLine("Entro a leer");
+
                     }
                     else
                     {
@@ -477,52 +628,66 @@ namespace Compilla
                 {
                     if (v.Equals("si"))
                     {
- 
+                       // string oc = "";
+                       // bool acceso = false;
                         Regex paraSi = new Regex(@"^[a-z]+[ ]+[(]+[a-zA-Z0-9]+((\b)[> < >= <= ==]{1,2})+([a-zA-Z0-9]+)+[)]$");
                         if (paraSi.IsMatch(archivo))
                         {
-                            archivo = leer.ReadLine();
-                            do
+                            /*archivo = leer.ReadLine();
+                            contador++;
+                            if (archivo.Equals("sisi"))
                             {
-                                contador++;
-                                if (archivo.Equals("sisi"))
+                                Regex paraImprimir = new Regex(@"^[a-z]+[ ]+[(]{1}(([#]+([a-z A-Z 0-9]|.*?)+[#]|[+])|([a-zA-Z0-9]))+[)]{1}()+[;]$");  //validacio en imprimir
+                                oc += "S";
+                                do
                                 {
-                                    Console.WriteLine("Entro al sisi");
-                                    do
+                                    contador++;
+                                    archivo = leer.ReadLine();
+                                    if (paraImprimir.IsMatch(archivo))
                                     {
-                                        archivo = leer.ReadLine();
-
-                                    } while (archivo != "sino");
-                                }
-                                else
-                                {
-                                    if (archivo.Equals("sino"))
-                                    {
-                                        Console.WriteLine("Entro al sino");
-                                        do
-                                        {
-                                            archivo = leer.ReadLine();
-
-                                        } while (archivo != "finsi");
+                                        acceso = true;
                                     }
                                     else
                                     {
-                                        if (archivo.Equals("finsi"))
+                                        if (archivo.Equals("sino"))
                                         {
-                                            contador2 = 1;
-                                            Console.WriteLine("Entro al finsi");
-                                            //archivo = leer.ReadLine();
+                                            oc += "I";
+                                            acceso = false;
                                         }
-                                        else
-                                        {
-                                            Console.WriteLine("Error de Sintax "+archivo);
-                                            archivo = leer.ReadLine();
-                                        }
+                                       
+                                    }
+                            
+                                } while (acceso);
+
+
+                            }
+                            else
+                            {
+                                Console.WriteLine("Error de sintaxis en"+ archivo);
+                            }
+
+                            if (oc.Equals("SIF"))
+                            {
+                                Console.WriteLine("Esta correcta la sinstaxis");
+                            }
+                            else
+                            {
+                                if (oc.Equals("S"))
+                                {
+                                    Console.WriteLine("Error de Sintaxis en "+ archivo);
+
+                                }
+                                else
+                                {
+                                    if (oc.Equals("SI"))
+                                    {
+                                        Console.WriteLine("Error de sintaxis falta agregar el fin del si ");
                                     }
                                 }
-                            } while (archivo!="finsi" || contador2!=1);
-                            
-                           
+                            }
+  */
+                          
+
                         }
                         else
                         {
